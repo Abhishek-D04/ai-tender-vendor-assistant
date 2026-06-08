@@ -1,15 +1,21 @@
+import Sidebar from "../components/common/Sidebar";
+
 export default function MainLayout({ children }) {
   return (
-    <div className="min-h-screen bg-slate-100">
-      <header className="bg-blue-600 text-white p-4 shadow">
-        <h1 className="font-bold">
-          AI Tender & Vendor Evaluation Assistant
-        </h1>
-      </header>
+    <div className="flex min-h-screen bg-slate-100">
+      <Sidebar />
 
-      <main className="p-6">
-        {children}
-      </main>
+      <div className="flex-1">
+        <header className="bg-white shadow p-4">
+          <h1 className="font-bold text-xl">
+            AI Tender & Vendor Evaluation Assistant
+          </h1>
+        </header>
+
+        <main className="p-6">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
