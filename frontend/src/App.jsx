@@ -1,12 +1,7 @@
-import AuthLayout from "./layouts/AuthLayout";
-import LoginPage from "./pages/LoginPage";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-    <AuthLayout>
-      <LoginPage />
-    </AuthLayout>
-  );
+  return <AppRoutes />;
 }
 
 export default App;
