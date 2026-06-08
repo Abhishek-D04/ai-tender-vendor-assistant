@@ -11,9 +11,12 @@ export default function Sidebar() {
             Dashboard
           </li>
 
-          <li className="p-3 rounded-lg hover:bg-gray-100">
-            Tenders
-          </li>
+          <a
+  href="/tenders"
+  className="block p-3 rounded-lg hover:bg-gray-100"
+>
+  Tenders
+</a>
 
           <li className="p-3 rounded-lg hover:bg-gray-100">
             Vendors
