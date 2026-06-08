@@ -1,11 +1,16 @@
+import Input from "../components/common/Input";
+import Button from "../components/common/Button";
+import Card from "../components/common/Card";
+
 export default function LoginPage() {
   return (
     <div className="w-full max-w-lg">
-      <div className="bg-white rounded-2xl shadow-lg p-8">
+      <Card>
         <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-  AI
-</div>
-        <h1 className="text-3xl font-bold text-center text-blue-600">
+          AI
+        </div>
+
+        <h1 className="text-3xl font-bold text-center text-blue-600 mt-4">
           AI Tender & Vendor Evaluation Assistant
         </h1>
 
@@ -14,29 +19,16 @@ export default function LoginPage() {
         </p>
 
         <form className="mt-8 space-y-4">
-          <div>
-            <label className="block mb-2 font-medium">
-              Username
-            </label>
+          <Input
+            label="Username"
+            placeholder="Enter username"
+          />
 
-            <input
-              type="text"
-              placeholder="Enter username"
-              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-2 font-medium">
-              Password
-            </label>
-
-            <input
-              type="password"
-              placeholder="Enter password"
-              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Enter password"
+          />
 
           <div className="flex justify-between text-sm">
             <label className="flex items-center gap-2">
@@ -52,14 +44,11 @@ export default function LoginPage() {
             </button>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
-          >
+          <Button>
             Login
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }
