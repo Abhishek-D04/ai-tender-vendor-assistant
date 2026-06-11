@@ -2,6 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 
+const fs = require("fs");
+const pdfParse = require("pdf-parse");
+
+
+
+const path = require("path");
+
 const app = express();
 
 app.use(cors());
@@ -37,6 +44,34 @@ app.post(
 );
 
 const PORT = 5000;
+
+app.post("/extract-text", async (req, res) => {
+  try {
+    const { filename } = req.body;
+
+    const filePath = path.join(
+      __dirname,
+      "uploads",
+      filename
+    );
+
+    const dataBuffer = fs.readFileSync(filePath);
+
+    const pdfData = await pdfParse(dataBuffer);
+
+    res.json({
+      success: true,
+      text: pdfData.text,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to extract text",
+    });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
