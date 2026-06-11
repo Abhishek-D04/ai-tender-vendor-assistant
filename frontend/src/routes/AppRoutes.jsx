@@ -7,6 +7,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import MainLayout from "../layouts/MainLayout";
 
 import TenderPage from "../pages/TenderPage";
+import TenderDetailsPage from "../pages/TenderDetailsPage";
 
 export default function AppRoutes() {
   return (
@@ -28,6 +29,15 @@ export default function AppRoutes() {
           </MainLayout>
         }
       />
+
+      <Route
+  path="/tenders/details"
+  element={
+    <MainLayout>
+      <TenderDetailsPage />
+    </MainLayout>
+  }
+/>
 
 
        <Route

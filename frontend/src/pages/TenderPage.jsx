@@ -54,9 +54,12 @@ export default function TenderPage() {
 
                 <td className="p-4">
                   <div className="flex gap-2">
-                    <button className="px-3 py-1 bg-blue-100 rounded">
-                      View
-                    </button>
+                    <a
+  href="/tenders/details"
+  className="px-3 py-1 bg-blue-100 rounded"
+>
+  View
+</a>
 
                     <button className="px-3 py-1 bg-green-100 rounded">
                       Analyze
