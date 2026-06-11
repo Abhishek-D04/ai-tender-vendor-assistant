@@ -18,9 +18,12 @@ export default function Sidebar() {
   Tenders
 </a>
 
-          <li className="p-3 rounded-lg hover:bg-gray-100">
-            Vendors
-          </li>
+          <a
+  href="/vendors"
+  className="block p-3 rounded-lg hover:bg-gray-100"
+>
+  Vendors
+</a>
 
           <li className="p-3 rounded-lg hover:bg-gray-100">
             Reports

@@ -9,6 +9,9 @@ import MainLayout from "../layouts/MainLayout";
 import TenderPage from "../pages/TenderPage";
 import TenderDetailsPage from "../pages/TenderDetailsPage";
 
+import VendorPage from "../pages/VendorPage";
+import VendorComparisonPage from "../pages/VendorComparisonPage";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -45,6 +48,24 @@ export default function AppRoutes() {
   element={
     <MainLayout>
       <TenderPage />
+    </MainLayout>
+  }
+/>
+
+<Route
+  path="/vendors"
+  element={
+    <MainLayout>
+      <VendorPage />
+    </MainLayout>
+  }
+/>
+
+<Route
+  path="/vendors/comparison"
+  element={
+    <MainLayout>
+      <VendorComparisonPage />
     </MainLayout>
   }
 />
