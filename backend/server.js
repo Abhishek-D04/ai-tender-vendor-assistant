@@ -11,6 +11,8 @@ const path = require("path");
 
 const app = express();
 
+const { analyzeTender } = require("./services/aiService");
+
 app.use(cors());
 app.use(express.json());
 
@@ -59,10 +61,20 @@ app.post("/extract-text", async (req, res) => {
 
     const pdfData = await pdfParse(dataBuffer);
 
+    const extractedText = pdfData.text;
+
+    console.log("Running Gemini Analysis...");
+
+    const aiAnalysis = await analyzeTender(
+      extractedText.substring(0, 5000)
+    );
+
     res.json({
       success: true,
-      text: pdfData.text,
+      text: extractedText,
+      aiAnalysis: aiAnalysis,
     });
+
   } catch (error) {
     console.error(error);
 

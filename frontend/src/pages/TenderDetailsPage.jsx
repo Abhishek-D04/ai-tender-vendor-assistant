@@ -6,6 +6,7 @@ export default function TenderDetailsPage() {
   const [message, setMessage] = useState("");
   const [uploadedFile, setUploadedFile] = useState("");
   const [extractedText, setExtractedText] = useState("");
+  const [aiAnalysis, setAiAnalysis] = useState("");
 
   const handleUpload = async () => {
     if (!file) {
@@ -47,7 +48,12 @@ export default function TenderDetailsPage() {
         }
       );
 
-      setExtractedText(response.data.text);
+      console.log(response.data);
+
+setExtractedText(response.data.text);
+setAiAnalysis(response.data.aiAnalysis);
+
+setMessage("Tender analysis completed successfully.");
     } catch (error) {
       console.error(error);
       setMessage("Text extraction failed.");
@@ -131,9 +137,19 @@ export default function TenderDetailsPage() {
         </h2>
 
         <div className="max-h-96 overflow-y-auto border rounded p-4 bg-gray-50 whitespace-pre-wrap">
-          {extractedText ||
-            "No analysis available yet."}
+          {aiAnalysis || "No AI analysis available yet."}
         </div>
+
+        <div className="bg-white p-6 rounded-xl shadow">
+  <h2 className="text-xl font-semibold mb-4">
+    Extracted PDF Text
+  </h2>
+
+  <div className="max-h-96 overflow-y-auto border rounded p-4 bg-gray-50 whitespace-pre-wrap">
+    {extractedText || "No text extracted yet."}
+  </div>
+</div>
+
       </div>
     </div>
   );
