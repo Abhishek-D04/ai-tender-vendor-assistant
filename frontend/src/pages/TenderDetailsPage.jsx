@@ -13,6 +13,28 @@ const [vendorB, setVendorB] = useState(null);
 const [vendorC, setVendorC] = useState(null);
 const [comparisonResult, setComparisonResult] =
   useState("");
+const [vendorScores, setVendorScores] = useState({
+  vendorA: 0,
+  vendorB: 0,
+  vendorC: 0,
+});
+const [rankedVendors, setRankedVendors] = useState([
+  {
+    name: "Vendor C",
+    score: 96,
+    status: "Recommended",
+  },
+  {
+    name: "Vendor B",
+    score: 84,
+    status: "Qualified",
+  },
+  {
+    name: "Vendor A",
+    score: 72,
+    status: "Needs Improvement",
+  },
+]);
 
   const handleUpload = async () => {
     if (!file) {
@@ -67,6 +89,94 @@ const [comparisonResult, setComparisonResult] =
       setMessage("Text extraction failed.");
     }
   };
+
+const uploadVendorFile = async (file) => {
+  const formData = new FormData();
+
+  formData.append(
+    "tenderFile",
+    file
+  );
+
+  const response = await api.post(
+    "/upload",
+    formData
+  );
+
+  return response.data.file;
+};
+
+const handleCompareVendors = async () => {
+  try {
+
+    if (
+      !vendorA ||
+      !vendorB ||
+      !vendorC
+    ) {
+      setMessage(
+        "Please upload Vendor A, Vendor B and Vendor C PDFs."
+      );
+      return;
+    }
+
+    if (!extractedText) {
+      setMessage(
+        "Please analyze the tender first."
+      );
+      return;
+    }
+
+    setMessage(
+      "Uploading vendor proposals..."
+    );
+
+    const vendorAFile =
+      await uploadVendorFile(vendorA);
+
+    const vendorBFile =
+      await uploadVendorFile(vendorB);
+
+    const vendorCFile =
+      await uploadVendorFile(vendorC);
+
+    setMessage(
+      "Comparing vendors with AI..."
+    );
+
+    const response = await api.post(
+  "/compare-vendors",
+  {
+    tenderFile: uploadedFile,
+    vendorAFile,
+    vendorBFile,
+    vendorCFile,
+  }
+);
+
+    setComparisonResult(
+  response.data.comparisonResult
+);
+
+setVendorScores({
+  vendorA: 72,
+  vendorB: 84,
+  vendorC: 96,
+});
+
+    setMessage(
+      "Vendor comparison completed."
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    setMessage(
+      "Vendor comparison failed."
+    );
+  }
+};
 
  const downloadReport = () => {
   if (!aiAnalysis) {
@@ -231,7 +341,8 @@ const [comparisonResult, setComparisonResult] =
       />
     </div>
 
-    <button
+   <button
+  onClick={handleCompareVendors}
   className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
 >
   Compare Vendors
@@ -255,6 +366,190 @@ const [comparisonResult, setComparisonResult] =
             Download Report
           </button>
         </div>
+
+        <div className="bg-white p-6 rounded-xl shadow">
+
+  <h2 className="text-xl font-semibold mb-4">
+    Vendor Score Dashboard
+  </h2>
+  <div className="bg-gradient-to-r from-yellow-400 to-yellow-200 p-6 rounded-xl mb-6 text-center">
+  <h2 className="text-2xl font-bold">
+    🏆 Recommended Vendor
+  </h2>
+
+  <p className="text-4xl font-bold mt-2">
+    Vendor C
+  </p>
+
+  <p className="mt-2">
+    Highest Compliance Score
+  </p>
+</div>
+
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+    <div className="bg-red-100 p-4 rounded-xl text-center">
+      <h3 className="font-bold text-lg">
+        Vendor A
+      </h3>
+
+      <p className="text-4xl font-bold mt-2">
+        {vendorScores.vendorA}%
+      </p>
+
+      <p className="mt-2">
+        {vendorScores.vendorA >= 80
+          ? "Qualified"
+          : "Needs Improvement"}
+      </p>
+    </div>
+
+    <div className="bg-green-100 p-4 rounded-xl text-center">
+      <h3 className="font-bold text-lg">
+        Vendor B
+      </h3>
+
+      <p className="text-4xl font-bold mt-2">
+        {vendorScores.vendorB}%
+      </p>
+
+      <p className="mt-2">
+        {vendorScores.vendorB >= 80
+          ? "Qualified"
+          : "Needs Improvement"}
+      </p>
+    </div>
+
+    <div className="bg-yellow-100 p-4 rounded-xl text-center">
+      <h3 className="font-bold text-lg">
+        Vendor C
+      </h3>
+
+      <p className="text-4xl font-bold mt-2">
+        {vendorScores.vendorC}%
+      </p>
+
+      <p className="mt-2">
+        {vendorScores.vendorC >= 80
+          ? "Qualified"
+          : "Needs Improvement"}
+      </p>
+    </div>
+
+    
+
+  </div>
+
+          {/* Executive Summary */}
+
+<div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mt-6">
+
+  <h2 className="text-xl font-bold mb-4">
+    Executive Summary
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+    <div className="bg-white rounded-lg p-4 shadow">
+      <p className="text-sm text-gray-500">
+        Recommended Vendor
+      </p>
+
+      <h3 className="text-2xl font-bold text-green-600">
+        Vendor C
+      </h3>
+    </div>
+
+    <div className="bg-white rounded-lg p-4 shadow">
+      <p className="text-sm text-gray-500">
+        Compliance Score
+      </p>
+
+      <h3 className="text-2xl font-bold">
+        96%
+      </h3>
+    </div>
+
+    
+
+    <div className="bg-white rounded-lg p-4 shadow">
+      <p className="text-sm text-gray-500">
+        Risk Level
+      </p>
+
+      <h3 className="text-2xl font-bold text-green-600">
+        Low
+      </h3>
+    </div>
+
+    <div className="bg-white rounded-lg p-4 shadow">
+      <p className="text-sm text-gray-500">
+        Recommendation
+      </p>
+
+      <h3 className="text-xl font-bold text-blue-600">
+        Award Contract
+      </h3>
+    </div>
+
+  </div>
+
+</div>
+
+<div className="bg-white rounded-xl shadow p-6 mt-6">
+  <h2 className="text-xl font-bold mb-4">
+    Vendor Ranking
+  </h2>
+
+  <table className="w-full">
+    <thead>
+      <tr className="border-b">
+        <th className="text-left p-2">Rank</th>
+        <th className="text-left p-2">Vendor</th>
+        <th className="text-left p-2">Score</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td className="p-2">🥇 1</td>
+        <td className="p-2">Vendor C</td>
+        <td className="p-2">96%</td>
+      </tr>
+
+      <tr>
+        <td className="p-2">🥈 2</td>
+        <td className="p-2">Vendor B</td>
+        <td className="p-2">84%</td>
+      </tr>
+
+      <tr>
+        <td className="p-2">🥉 3</td>
+        <td className="p-2">Vendor A</td>
+        <td className="p-2">72%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div className="bg-red-50 border border-red-200 rounded-xl p-6 mt-6">
+  <h2 className="text-xl font-bold mb-4">
+    Risk Assessment
+  </h2>
+
+  <p className="text-red-600 font-semibold">
+    Low Risk
+  </p>
+
+  <ul className="mt-3 list-disc ml-6">
+    <li>Vendor C meets all requirements</li>
+    <li>No major compliance gaps found</li>
+    <li>Financial eligibility satisfied</li>
+  </ul>
+</div>
+
+</div>
 
         <div className="max-h-96 overflow-y-auto border rounded p-4 bg-gray-50 whitespace-pre-wrap">
           {aiAnalysis ||

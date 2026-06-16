@@ -11,7 +11,10 @@ const path = require("path");
 
 const app = express();
 
-const { analyzeTender } = require("./services/aiService");
+const {
+  analyzeTender,
+  compareVendors,
+} = require("./services/aiService");
 
 app.use(cors());
 app.use(express.json());
@@ -81,6 +84,74 @@ app.post("/extract-text", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to extract text",
+    });
+  }
+});
+
+app.post("/compare-vendors", async (req, res) => {
+  try {
+
+    const {
+      tenderFile,
+      vendorAFile,
+      vendorBFile,
+      vendorCFile,
+    } = req.body;
+
+    const readPdfText = async (filename) => {
+
+      const filePath = path.join(
+        __dirname,
+        "uploads",
+        filename
+      );
+
+      const dataBuffer =
+        fs.readFileSync(filePath);
+
+      const pdfData =
+        await pdfParse(dataBuffer);
+
+      return pdfData.text;
+    };
+
+    const tenderText =
+      await readPdfText(tenderFile);
+
+    const vendorAText =
+      await readPdfText(vendorAFile);
+
+    const vendorBText =
+      await readPdfText(vendorBFile);
+
+    const vendorCText =
+      await readPdfText(vendorCFile);
+
+    console.log(
+      "Running Vendor Comparison..."
+    );
+
+    const comparisonResult =
+      await compareVendors(
+        tenderText,
+        vendorAText,
+        vendorBText,
+        vendorCText
+      );
+
+    res.json({
+      success: true,
+      comparisonResult,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message:
+        "Vendor comparison failed",
     });
   }
 });
